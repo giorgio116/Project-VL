@@ -27,13 +27,12 @@ const account5 = wallet5.connect(provider);
 
 
 //inserting some parameters
-const inputam = 0.1;
-const inputamount = inputam.toString(); //create an input for this in html
-const appramount = (inputam*2).toString();
+const inputam = 0.1; //create an input for this in html
+const inputamount = inputam.toString();
 const amountIn = ethers.utils.parseUnits(inputamount, 'ether'); //amount tokenIn to swap
 tokenIn = 'insert tokenIn address';
 tokenOut = 'insert tokenOut address';
-const mygasPrice = ethers.utils.parseUnits('10', 'gwei');
+const mygasPrice = ethers.utils.parseUnits('10', 'gwei'); //create an input for this in html
 const mygasLimit = 200000
 
 
