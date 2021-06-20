@@ -1,6 +1,7 @@
 const ethers = require('ethers');
 
 const addresses = {
+  ETH: 'insert ETH address',
   factory: 'insert factory address', 
   router: 'insert router address',
 }
@@ -30,9 +31,9 @@ const account5 = wallet5.connect(provider);
 const inputam = 0.01;
 const slippage = 90; //slipage (in %)
 const inputamount = inputam.toString(); //create an input for this in html
-const amountIn = ethers.utils.parseUnits(inputamount, 'ether'); //amount of ONE to swap
-tokenIn = addresses.ONE; //ONE address
-tokenOut = '0x8D4F19bec883Ba20F4f295706C53F760Cd0BC2B0'; //viper on viperswap
+const amountIn = ethers.utils.parseUnits(inputamount, 'ether'); //amount of ETH to swap
+tokenIn = addresses.ETH; //ONE address
+tokenOut = 'insert address of tokenOut'; //viper on viperswap
 const mygasPrice = ethers.utils.parseUnits('1', 'gwei');
 const mygasLimit = 300000
 
