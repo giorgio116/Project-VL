@@ -27,27 +27,30 @@ const account5 = wallet5.connect(provider);
 
 
 //inserting some parameters
-const inputam = 0.1; //create an input for this in html
-const inputamount = inputam.toString();
-const amountIn = ethers.utils.parseUnits(inputamount, 'ether'); //amount tokenIn to swap
-tokenIn = 'insert tokenIn address';
-tokenOut = 'insert tokenOut address';
-const mygasPrice = ethers.utils.parseUnits('10', 'gwei'); //create an input for this in html
-const mygasLimit = 200000
+const inputam = 0.01;
+const slippage = 90; //slipage (in %)
+const inputamount = inputam.toString(); //create an input for this in html
+const amountIn = ethers.utils.parseUnits(inputamount, 'ether'); //amount of ONE to swap
+tokenIn = addresses.ONE; //ONE address
+tokenOut = '0x8D4F19bec883Ba20F4f295706C53F760Cd0BC2B0'; //viper on viperswap
+const mygasPrice = ethers.utils.parseUnits('1', 'gwei');
+const mygasLimit = 300000
 
-
-console.log("Address private1: " + wallet1.address);
-console.log("Address private2: " + wallet2.address);
-console.log("Address private2: " + wallet3.address);
-console.log("Address private2: " + wallet4.address);
-console.log("Address private2: " + wallet5.address);
+console.log(`
+    List of addresses:
+    =================
+    Address private1: ${wallet1.address}
+    Address private2: ${wallet2.address}
+    Address private3: ${wallet3.address}
+    Address private4: ${wallet4.address}
+    Address private5: ${wallet5.address}
+`);
 
 //import contract functions
 const router1 = new ethers.Contract(
   addresses.router,
   [
     'function getAmountsOut(uint amountIn, address[] memory path) public view returns (uint[] memory amounts)',
-    'function swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts)',
     'function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline) external payable returns (uint[] memory amounts)'
   ],
   account1
@@ -57,7 +60,6 @@ const router2 = new ethers.Contract(
     addresses.router,
     [
       'function getAmountsOut(uint amountIn, address[] memory path) public view returns (uint[] memory amounts)',
-      'function swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts)',
       'function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline) external payable returns (uint[] memory amounts)'
     ],
     account2
@@ -67,7 +69,6 @@ const router3 = new ethers.Contract(
   addresses.router,
   [
     'function getAmountsOut(uint amountIn, address[] memory path) public view returns (uint[] memory amounts)',
-    'function swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts)',
     'function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline) external payable returns (uint[] memory amounts)'
   ],
   account3
@@ -77,7 +78,6 @@ const router4 = new ethers.Contract(
   addresses.router,
   [
     'function getAmountsOut(uint amountIn, address[] memory path) public view returns (uint[] memory amounts)',
-    'function swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts)',
     'function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline) external payable returns (uint[] memory amounts)'
   ],
   account4
@@ -87,7 +87,6 @@ const router5 = new ethers.Contract(
   addresses.router,
   [
     'function getAmountsOut(uint amountIn, address[] memory path) public view returns (uint[] memory amounts)',
-    'function swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts)',
     'function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline) external payable returns (uint[] memory amounts)'
   ],
   account5
@@ -109,11 +108,12 @@ async function swap() {
 
     //buy the new token
     //Our execution price will be a bit different, we need some flexbility
-    const amountOutMin = amounts[1].sub(amounts[1].div(10));
+    const amountOutMin = (amounts[1].mul(100-slippage)).div(100);
     console.log(`
       Buying new token
       =================
       tokenIn: ${amountIn.toString()} ${tokenIn} (ONE)
+      slippage used: ${slippage} %
       minimumTokenOut: ${amountOutMin.toString()} ${tokenOut}
     `);
     //transactions for different wallets
@@ -124,7 +124,7 @@ async function swap() {
       Math.floor(Date.now() / 1000) + 60 * 3, //3 minutes
       {
         gasPrice: mygasPrice,
-        gasLimit: mygasLimit,
+        //gasLimit: mygasLimit,
         value: ethers.utils.parseUnits(inputamount, 'ether')
       }
     );
@@ -136,7 +136,7 @@ async function swap() {
         Math.floor(Date.now() / 1000) + 60 * 3, //3 minutes
         {
           gasPrice: mygasPrice,
-          gasLimit: mygasLimit,
+          //gasLimit: mygasLimit,
           value: ethers.utils.parseUnits(inputamount, 'ether')
         }
     );
@@ -148,7 +148,7 @@ async function swap() {
         Math.floor(Date.now() / 1000) + 60 * 3, //3 minutes
         {
           gasPrice: mygasPrice,
-          gasLimit: mygasLimit,
+          //gasLimit: mygasLimit,
           value: ethers.utils.parseUnits(inputamount, 'ether')
         }
     );
@@ -160,7 +160,7 @@ async function swap() {
       Math.floor(Date.now() / 1000) + 60 * 3, //3 minutes
       {
         gasPrice: mygasPrice,
-        gasLimit: mygasLimit,
+        //gasLimit: mygasLimit,
         value: ethers.utils.parseUnits(inputamount, 'ether')
       }
     );
@@ -172,7 +172,7 @@ async function swap() {
       Math.floor(Date.now() / 1000) + 60 * 3, //3 minutes
       {
         gasPrice: mygasPrice,
-        gasLimit: mygasLimit,
+        //gasLimit: mygasLimit,
         value: ethers.utils.parseUnits(inputamount, 'ether')
       }
     );
